@@ -391,7 +391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &385154994
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -478,7 +478,8 @@ MonoBehaviour:
   FinalNodeList: []
   allowDiagonal: 1
   dontCrossCorner: 1
-  dest: {fileID: 0}
+  dest: {fileID: 457906059}
+  Npc: {fileID: 0}
 --- !u!1 &457906059
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,7 +965,8 @@ MonoBehaviour:
   FinalNodeList: []
   allowDiagonal: 0
   dontCrossCorner: 0
-  dest: {fileID: 0}
+  dest: {fileID: 457906059}
+  Npc: {fileID: 0}
 --- !u!1 &572605568
 GameObject:
   m_ObjectHideFlags: 0

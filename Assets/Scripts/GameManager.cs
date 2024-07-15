@@ -30,15 +30,42 @@ public class GameManager : MonoBehaviour
     List<Node> OpenList, ClosedList;
 
     public GameObject dest;
+    //public vector3 dest;
+
+    public GameObject Npc;
+    private void Start()
+    {
+        Npc = this.gameObject;
+    }
+
     private void FixedUpdate()
     {
         PathFinding();
+        StartCoroutine(NpcMove(FinalNodeList));
     }
+
     private void Update()
     {
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
     }
+
+    IEnumerator NpcMove(List<Node> optimizedPath)
+    {
+        int i = 0;
+        Vector3 destination = new Vector3(optimizedPath[i].x-this.transform.position.x, optimizedPath[i].y-this.transform.position.y,0);
+        Npc.GetComponent<Npc>().Move(destination);
+        if (Npc.GetComponent<Npc>().moveState == 0)
+        {
+            i++;
+            if (optimizedPath[i] != null)
+            {
+                yield break;
+            }
+        }
+        yield return null;
+    }
+
     public void PathFinding()
     {
         // NodeArray의 크기 정해주고, isWall, x, y 대입
