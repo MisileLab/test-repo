@@ -702,6 +702,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -752,7 +753,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 25.93
+  orthographic size: 25
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -783,6 +784,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2274ca13e07754c9aa4822f618cc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  limitScale: 25
+  limitCameraPosPositive: {x: 85, y: 50}
+  limitCameraPosNegative: {x: -15, y: -50}
 --- !u!1 &528271634
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,6 +832,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   front: {fileID: 1811826087, guid: 44e3d2c9daf882540963cd494629cd8e, type: 3}
   back: {fileID: -1339872681, guid: 44e3d2c9daf882540963cd494629cd8e, type: 3}
+  animator: {fileID: 0}
+  render: {fileID: 0}
+  moveState: 0
+  isFront: 0
 --- !u!212 &528271636
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Npc : MonoBehaviour
@@ -21,8 +20,9 @@ public class Npc : MonoBehaviour
 
     void Update()
     {
-        animator.SetInteger("moveState", moveState);
-        animator.SetBool("isFront", isFront);
+        // moveState and isFront is undefined
+        // animator.SetInteger("moveState", moveState);
+        // animator.SetBool("isFront", isFront);
 
         if (moveState != 0) {
             moveTime += Time.deltaTime;
