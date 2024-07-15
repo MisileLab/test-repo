@@ -6,8 +6,8 @@ public class Npc : MonoBehaviour
     [SerializeField] Sprite front, back;
     public Animator animator;
     public SpriteRenderer render;
-    public int moveState;
-    public bool isFront;
+    public int moveState = 0;
+    public bool isFront = false;
     float moveTime;
     IEnumerator moveRoutine;
     void Start()
@@ -20,9 +20,8 @@ public class Npc : MonoBehaviour
 
     void Update()
     {
-        // moveState and isFront is undefined
-        // animator.SetInteger("moveState", moveState);
-        // animator.SetBool("isFront", isFront);
+        animator.SetInteger("moveState", moveState);
+        animator.SetBool("isFront", isFront);
 
         if (moveState != 0) {
             moveTime += Time.deltaTime;
