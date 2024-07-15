@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Npc : MonoBehaviour
@@ -7,8 +6,8 @@ public class Npc : MonoBehaviour
     [SerializeField] Sprite front, back;
     public Animator animator;
     public SpriteRenderer render;
-    public int moveState;
-    public bool isFront;
+    public int moveState = 0;
+    public bool isFront = false;
     float moveTime;
     IEnumerator moveRoutine;
     void Start()
