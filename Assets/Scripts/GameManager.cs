@@ -14,10 +14,11 @@ public class GameManager : MonoBehaviour
     public List<Npc> npcs = new();
     public int kicked = 0;
     public int health;
+
+    public List<bool> isActive = new List<bool>() { false, false, false, false , false};//0-cloth,1-book,2-com,3-bed,4-console
     void Start()
     {
         Instance = this;
-
         GameStart();
     }
 

@@ -27,8 +27,7 @@ public class Movement : MonoBehaviour
     Node StartNode, TargetNode, CurNode;
     List<Node> OpenList, ClosedList;
 
-    public GameObject dest;
-    //public vector3 dest;
+    public Vector3 dest;
 
     public Npc npcnpc;
     public bool isMoving = false;
@@ -68,14 +67,14 @@ public class Movement : MonoBehaviour
     public void randomPosition() {
         System.Random rand = new System.Random();
         while (true) {
-            dest.transform.position = new Vector3(
+            dest = new Vector3(
                 rand.Next(bottomLeft.x, topRight.x),
                 rand.Next(bottomLeft.y, topRight.y),
                 0
             );
-            targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+            targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
             bool isWall = false;
-            foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(dest.transform.position.x, dest.transform.position.y), 0.4f)) {
+            foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(dest.x, dest.y), 0.4f)) {
                 if (col.gameObject.layer != 0) isWall = true;
             }
             if (!isWall) {
@@ -108,10 +107,10 @@ public class Movement : MonoBehaviour
             randomPosition();
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
-        targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+        targetPos = new Vector2Int(Mathf.RoundToInt(dest    .x), Mathf.RoundToInt(dest.y));
         if (!isMoving
-            && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.transform.position.x)
-            && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.transform.position.y)
+            && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.x)
+            && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.y)
         ) {
             randomPosition();
         }
