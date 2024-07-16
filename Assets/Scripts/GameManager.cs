@@ -33,18 +33,33 @@ public class GameManager : MonoBehaviour
     //public vector3 dest;
 
     public Npc npcnpc;
+    public bool isMoving=false;
 
     public int i=0;
 
     float delay;
 
+    int state = 0;
+
     private void FixedUpdate()
     {
-        delay += Time.fixedDeltaTime;
+        if(isMoving){
+            delay += Time.fixedDeltaTime;
 
-        if (delay > 1f) {
-            StartCoroutine(NpcMove(FinalNodeList));
-            delay = 0;
+        if (state == 0) {
+            if (delay > 0.4f) {
+                if (Random.Range(0, 100) <= 30) {
+                    state = 1;
+                }
+            
+                StartCoroutine(NpcMove(FinalNodeList));
+                delay = 0;
+            }
+        } else if (state == 1) {
+            if (delay > 1f) {
+                state = 0;
+            }
+        }
         }
     }
 
@@ -52,6 +67,8 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0)){
             PathFinding();
+            FinalNodeList.Remove(FinalNodeList[0]);
+            isMoving=true;
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
@@ -60,8 +77,9 @@ public class GameManager : MonoBehaviour
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
+        Debug.Log(destination);
         npcnpc.MoveTo(destination,0.2f);
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         i++;
     }
 
