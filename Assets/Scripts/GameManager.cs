@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0)){
             PathFinding();
-            FinalNodeList.Remove(FinalNodeList[0]);
+            FinalNodeList.RemoveAt(0);
             isMoving=true;
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
@@ -77,7 +77,8 @@ public class GameManager : MonoBehaviour
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
         if (i >= optimizedPath.Count) {
-            yield break; // 리스트의 들어있는 값 수보다 i가 높을 시 return null
+            isMoving = false;
+            yield break; // 리스트의 들어있는 값 수보다 i가 높을 시 yield break
         }
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
         Debug.Log(destination);
