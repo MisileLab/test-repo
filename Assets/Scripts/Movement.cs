@@ -38,8 +38,7 @@ public class Movement : MonoBehaviour
     float delay;
 
     int state = 0;
-
-    private Vector2 cloth,book,com,bed,console;
+    private List<Vector2> eventPos = new List<Vector2>() {new(36,7),new(40,5),new(45,3),new(57,-4),new(21,4)};
     private int totalEventCount=0;
 
     private void FixedUpdate()
@@ -49,16 +48,15 @@ public class Movement : MonoBehaviour
 
             if (state == 0) {
                 if (delay > 0.4f) {
-                    if (Random.Range(0, 100) <= 30) {
+                    if (Random.Range(0, 100) <= 10) {
                         state = 1;
                     }
-
                     StartCoroutine(NpcMove(FinalNodeList));
                     delay = 0;
                 }
             } else if (state == 1) {
                 if (delay > 1f) {
-                    state = 0;
+                    StartCoroutine(Event());
                 }
             }
         }
@@ -88,26 +86,10 @@ public class Movement : MonoBehaviour
             isMoving = true;
         }
     }
-    private void Start(){
-        cloth = new Vector2(36,7);
-        book = new Vector2(40,5);
-        com = new Vector2(45,3);
-        bed = new Vector2(57,-4);
-        console = new Vector2(21,4);
-    }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)){
-            isPathFinding = false;
-            PathFinding();
-            FinalNodeList.RemoveAt(0);
-            isMoving = true;
-        }
-        if (Input.GetMouseButtonDown(1)) {
-            randomPosition();
-        }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
-        targetPos = new Vector2Int(Mathf.RoundToInt(dest    .x), Mathf.RoundToInt(dest.y));
+        targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
         if (!isMoving
             && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.x)
             && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.y)
@@ -129,22 +111,21 @@ public class Movement : MonoBehaviour
         i++;
     }
     IEnumerator Event(){
-        int rand = Random.Range(1,20);
+        int rand = Random.Range(0,19);
         if(totalEventCount<=2){
-            if(rand == 1){
-                
-            }
-            else if(rand == 2){
-
-            }
-            else if(rand == 3){
-
-            }
-            else if(rand == 4){
-
-            }
-            else if(rand == 5){
-
+            if (rand < 5)
+            {
+                if(GameManager.Instance.isActive[rand] == false)
+                {
+                    totalEventCount++;
+                    dest = eventPos[rand]; 
+                    isPathFinding = false;
+                    PathFinding();
+                    FinalNodeList.RemoveAt(0);
+                    isMoving = true;
+                    GameManager.Instance.isActive[rand] = true;
+                    yield return new WaitForSeconds(1f);
+                }
             }
             else{
                 randomPosition();
@@ -153,7 +134,6 @@ public class Movement : MonoBehaviour
         else{
             randomPosition();
         }
-
         yield return null;
     }
     public void PathFinding()
