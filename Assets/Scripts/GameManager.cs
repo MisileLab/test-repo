@@ -61,18 +61,8 @@ public class GameManager : MonoBehaviour
     {
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
         npcnpc.MoveTo(destination,0.2f);
-        Debug.Log(npcnpc.moveState);
-        if (npcnpc.moveState == 0)
-        {
-            Debug.Log(npcnpc.moveState);
-            i++;
-            if (optimizedPath[i] != null)
-            {
-                i=0;
-                yield break;
-            }
-        }
-        yield return null;
+        yield return new WaitForSeconds(0.3f);
+        i++;
     }
 
     public void PathFinding()

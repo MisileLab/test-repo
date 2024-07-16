@@ -25,7 +25,7 @@ public class Npc : MonoBehaviour
         if (moveState != 0) {
             moveTime += Time.deltaTime;
 
-            if (moveTime > 0.1f) {
+            if (moveTime > 0.05f) {
                 moveState = 0;
                 moveTime = 0;
             }
