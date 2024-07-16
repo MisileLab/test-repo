@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     //public vector3 dest;
 
     public GameObject Npc;
+
+    float delay;
     private void Start()
     {
         Npc = this.gameObject;
@@ -41,7 +43,13 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         PathFinding();
-        StartCoroutine(NpcMove(FinalNodeList));
+
+        delay += Time.fixedDeltaTime;
+
+        if (delay > 0.2f) {
+            StartCoroutine(NpcMove(FinalNodeList));
+            delay = 0;
+        }
     }
 
     private void Update()
