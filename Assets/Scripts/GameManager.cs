@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     float delay;
 
-    int state = 0;
+    public int state = 0;
 
     private void FixedUpdate()
     {

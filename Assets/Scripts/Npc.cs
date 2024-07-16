@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Npc : MonoBehaviour
 {
@@ -10,12 +11,21 @@ public class Npc : MonoBehaviour
     public bool isFront = false;
     float moveTime;
     IEnumerator moveRoutine;
+    [SerializeField] Image balloon;
+    [SerializeField] Text comment;
+    float balTime = 0;
+
+    [SerializeField] Material outline;
+    Material defMat;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         render = GetComponent<SpriteRenderer>();
 
-        //MoveTo(transform.position + new Vector3(0, 3, 0), 1); //test
+        defMat = render.material;
+
+        //MoveTo(transform.position + new Vector3(0, 3, 0), 1); //test        
     }
 
     void Update()
@@ -38,6 +48,69 @@ public class Npc : MonoBehaviour
                 render.sprite = back;
             }
         }
+
+        if (comment.text != "") {
+            balTime += Time.deltaTime;
+
+            if (balTime > 2) {
+                Color col = comment.color;
+                col.a = 3.5f - balTime;
+
+                Color col2 = balloon.color;
+                col2.a = 3.5f - balTime;
+
+                comment.color = col;
+                balloon.color = col2;
+
+                if (balTime > 3.5f) {
+                    comment.text = "";
+                    balTime = 0;
+
+                    balloon.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        MouseMapping();
+    }
+
+    public void Comment(string str) {
+        balTime = 0;
+        comment.text = str;
+
+        Color col = comment.color;
+        col.a = 1;
+
+        comment.color = col;
+
+        Color col2 = balloon.color;
+        col2.a = 1;
+
+        balloon.color = col2;
+
+        balloon.gameObject.SetActive(true);
+    }
+
+    void MouseMapping() {
+
+        Vector3 mPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y));
+
+        if (Vector3.Distance(new Vector3(mPos.x, mPos.y), new Vector3(transform.position.x, transform.position.y)) <= 2) {
+            render.material = outline;
+            if (Input.GetMouseButtonDown(0)) {
+                OnClick();
+            }
+        } else {
+            render.material = defMat;
+        }
+    }
+
+    public void OnSelect() {
+        Debug.Log("Select");
+    }
+
+    public void OnClick() {
+        Debug.Log("click");
     }
 
     public void Move(Vector3 vel) {
@@ -52,7 +125,7 @@ public class Npc : MonoBehaviour
                 render.flipX = true;
             }
         } else {
-            if (vel.y >= 0.1) {
+            if (vel.y >= 0) {
                 moveState = 2;
                 isFront = false;
             } else {
