@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         highlight.SetActive(false);
 
         if (action == "kick") {
+            action = null;
             Destroy(npc.GetComponent<Movement>());
             npc.Comment(kickComment[Random.Range(0, kickComment.Length)]);
 
@@ -77,9 +78,9 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             DestroyNpc(npc);
+        } else {
+            action = null;
         }
-
-        action = null;
 
         yield return null;
     }

@@ -148,12 +148,14 @@ public class Movement : MonoBehaviour
 
             }
             else{
-                randomPosition
+                randomPosition();
             }
         }
         else{
             randomPosition();
         }
+
+        yield return null;
     }
     public void PathFinding()
     {
