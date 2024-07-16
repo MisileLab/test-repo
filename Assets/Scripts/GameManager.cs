@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
+        if (optimizedPath.Count >= i) {
+            yield return null; // 리스트의 들어있는 값 수보다 i가 높을 시 return null
+        }
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
         npcnpc.MoveTo(destination,0.2f);
         yield return new WaitForSeconds(0.3f);
