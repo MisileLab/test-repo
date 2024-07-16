@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     public Npc npcnpc;
     public bool isMoving = false;
+    public bool isPathFinding = false;
 
     public int i = 0;
 
@@ -63,12 +64,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0)){
+    public void randomPosition() {
+        Debug.Log("hi");
+        System.Random rand = new System.Random();
+        while (true) {
+            dest.transform.position = new Vector3(
+                rand.Next(bottomLeft.x, topRight.x),
+                rand.Next(bottomLeft.y, topRight.y),
+                0
+            );
+            targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+            bool isWall = false;
+            foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(dest.transform.position.x, dest.transform.position.y), 0.4f)) {
+                if (col.gameObject.layer != 0) isWall = true;
+            }
+            if (!isWall) {
+                break;
+            }
+        }
+        if (isPathFinding) {
+            isPathFinding = false;
             PathFinding();
             FinalNodeList.RemoveAt(0);
             isMoving = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)){
+            isPathFinding = false;
+            PathFinding();
+            FinalNodeList.RemoveAt(0);
+            isMoving = true;
+        }
+        if (Input.GetMouseButtonDown(1)) {
+            randomPosition();
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
@@ -76,19 +107,7 @@ public class GameManager : MonoBehaviour
             && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.transform.position.x)
             && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.transform.position.y)
         ) {
-            System.Random rand = new System.Random();
-            dest.transform.position = new Vector3(
-                rand.Next(bottomLeft.x, topRight.x),
-                rand.Next(bottomLeft.y, topRight.y),
-                0
-            );
-            while (dest.gameObject.layer == LayerMask.NameToLayer("Wall") || dest.gameObject.layer == LayerMask.NameToLayer("object")) {
-                dest.transform.position = new Vector3(
-                    rand.Next(bottomLeft.x, topRight.x),
-                    rand.Next(bottomLeft.y, topRight.y),
-                    0
-                );
-            }
+            randomPosition();
         }
     }
 
@@ -107,6 +126,8 @@ public class GameManager : MonoBehaviour
 
     public void PathFinding()
     {
+        isPathFinding = true;
+
         // NodeArray의 크기 정해주고, isWall, x, y 대입
         sizeX = topRight.x - bottomLeft.x + 1;
         sizeY = topRight.y - bottomLeft.y + 1;
@@ -134,7 +155,7 @@ public class GameManager : MonoBehaviour
         FinalNodeList = new List<Node>();
 
 
-        while (OpenList.Count > 0)
+        while (OpenList.Count > 0 && isPathFinding)
         {
             // 열린리스트 중 가장 F가 작고 F가 같다면 H가 작은 걸 현재노드로 하고 열린리스트에서 닫힌리스트로 옮기기
             CurNode = OpenList[0];
@@ -176,6 +197,7 @@ public class GameManager : MonoBehaviour
             OpenListAdd(CurNode.x, CurNode.y - 1);
             OpenListAdd(CurNode.x - 1, CurNode.y);
         }
+        i = 0;
     }
 
     void OpenListAdd(int checkX, int checkY)
