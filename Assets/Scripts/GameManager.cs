@@ -15,8 +15,10 @@ public class GameManager : MonoBehaviour
     public int kicked = 0;
     public int health;
 
-    public List<bool> isActive = new List<bool>() { false, false, false, false , false};//0-cloth,1-book,2-com,3-bed,4-console
-    void Start()
+    public List<EventAction> events;
+
+    public List<bool> isActive;//0-cloth,1-book,2-com,3-bed,4-console
+    void Awake()
     {
         Instance = this;
         GameStart();
@@ -48,6 +50,8 @@ public class GameManager : MonoBehaviour
             gameTime += Time.deltaTime;
         }
 
+        if (health < 5) health = 5;
+
         if (action != null) {
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 highlight.SetActive(false);
@@ -73,7 +77,10 @@ public class GameManager : MonoBehaviour
 
         if (action == "kick") {
             action = null;
-            Destroy(npc.GetComponent<Movement>());
+            var movement = npc.GetComponent<Movement>();
+            movement.EventEnd();
+            Destroy(movement);
+            
             npc.Comment(kickComment[Random.Range(0, kickComment.Length)]);
 
             kicked++;

@@ -35,12 +35,14 @@ public class Movement : MonoBehaviour
 
     public int i = 0;
 
-    float delay;
+    public float delay;
 
-    int state = 0;
+    public int state = 0;
     private List<Vector2> eventPos = new List<Vector2>() {new(36,7),new(40,5),new(45,3),new(57,-4),new(21,4)};
     private int totalEventCount=0;
-    private int eventKind;
+    public int eventKind;
+    public bool arrived;
+    EventAction @event = null;
 
     private void FixedUpdate()
     {
@@ -59,11 +61,46 @@ public class Movement : MonoBehaviour
                     StartCoroutine(Event());
                 }
             }
-            else if(state == 2)
-            {
-                Debug.Log(eventKind);
-            }
         }
+
+        if (state == 2)
+            {
+                if (delay > 0.4f) {
+                    StartCoroutine(NpcMove(FinalNodeList));
+                    delay = 0;
+                }
+
+                if (!isMoving) {
+                    @event.ActNpc = npcnpc;
+                    @event.StartAction();
+
+                    state = 3;
+                }
+            }
+            else if(state == 3)
+            {
+                if (@event == null) {
+                    state = 0;
+                } else {
+                    @event.InAction();
+
+                    Debug.Log(@event.EndAction());
+                
+                    if (@event.EndAction()) {
+                        EventEnd();
+                    }
+                }
+            }
+    }
+
+    public void EventEnd() {
+        delay = 0;
+        state = 0;
+
+        @event.Activated = false;
+        @event.ActNpc = null;
+
+        @event = null;
     }
 
     public void randomPosition() {
@@ -101,6 +138,9 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.E)) {
+            PathFinding();
+        }
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y / 100);
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
@@ -108,7 +148,8 @@ public class Movement : MonoBehaviour
             && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.x)
             && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.y)
         ) {
-            randomPosition();
+            if (state == 0) randomPosition();
+        } else {
         }
     }
 
@@ -119,26 +160,32 @@ public class Movement : MonoBehaviour
             yield break; // 리스트의 들어있는 값 수보다 i가 높을 시 yield break
         }
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y, 0);
-        Debug.Log(destination);
+        //Debug.Log(destination);
         npcnpc.MoveTo(destination, 0.2f);
         yield return new WaitForSeconds(0.2f);
         i++;
     }
     IEnumerator Event(){
-        eventKind = Random.Range(0,19);
+        eventKind = Random.Range(0,10 + GameManager.Instance.events.Count);
         if(totalEventCount<=2){
-            if (eventKind < 5)
+            if (eventKind < GameManager.Instance.events.Count)
             {
-                if(GameManager.Instance.isActive[eventKind] == false)
+                @event = GameManager.Instance.events[eventKind];
+                if(@event.Activated == false)
                 {
                     totalEventCount++;
-                    dest = eventPos[eventKind];
+                    dest = @event.Pos;
                     isPathFinding = false;
+
+                    @event.Activated = true;
+
+                    yield return new WaitForSeconds(0.1f);
                     PathFinding();
-                    FinalNodeList.RemoveAt(0);
+                    if (FinalNodeList.Count > 0) FinalNodeList.RemoveAt(0);
                     isMoving = true;
-                    GameManager.Instance.isActive[eventKind] = true;
+
                     state = 2;
+
                     yield break;
                 }
             }
