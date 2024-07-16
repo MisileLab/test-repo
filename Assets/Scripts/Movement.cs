@@ -40,6 +40,9 @@ public class Movement : MonoBehaviour
 
     int state = 0;
 
+    private Vector2 cloth,book,com,bed,console;
+    private int totalEventCount=0;
+
     private void FixedUpdate()
     {
         if (isMoving) {
@@ -63,7 +66,6 @@ public class Movement : MonoBehaviour
     }
 
     public void randomPosition() {
-        Debug.Log("hi");
         System.Random rand = new System.Random();
         while (true) {
             dest.transform.position = new Vector3(
@@ -87,7 +89,13 @@ public class Movement : MonoBehaviour
             isMoving = true;
         }
     }
-
+    private void Start(){
+        cloth = new Vector2(36,7);
+        book = new Vector2(40,5);
+        com = new Vector2(45,3);
+        bed = new Vector2(57,-4);
+        console = new Vector2(21,4);
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0)){
@@ -121,7 +129,32 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         i++;
     }
+    IEnumerator Event(){
+        int rand = Random.Range(1,20);
+        if(totalEventCount<=2){
+            if(rand == 1){
+                
+            }
+            else if(rand == 2){
 
+            }
+            else if(rand == 3){
+
+            }
+            else if(rand == 4){
+
+            }
+            else if(rand == 5){
+
+            }
+            else{
+                randomPosition
+            }
+        }
+        else{
+            randomPosition();
+        }
+    }
     public void PathFinding()
     {
         isPathFinding = true;
