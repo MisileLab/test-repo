@@ -40,12 +40,12 @@ public class Movement : MonoBehaviour
     int state = 0;
     private List<Vector2> eventPos = new List<Vector2>() {new(36,7),new(40,5),new(45,3),new(57,-4),new(21,4)};
     private int totalEventCount=0;
+    private int eventKind;
 
     private void FixedUpdate()
     {
         if (isMoving) {
             delay += Time.fixedDeltaTime;
-
             if (state == 0) {
                 if (delay > 0.4f) {
                     if (Random.Range(0, 100) <= 10) {
@@ -58,6 +58,10 @@ public class Movement : MonoBehaviour
                 if (delay > 1f) {
                     StartCoroutine(Event());
                 }
+            }
+            else if(state == 2)
+            {
+                Debug.Log(eventKind);
             }
         }
     }
@@ -111,28 +115,29 @@ public class Movement : MonoBehaviour
         i++;
     }
     IEnumerator Event(){
-        int rand = Random.Range(0,19);
+        eventKind = Random.Range(0,19);
         if(totalEventCount<=2){
-            if (rand < 5)
+            if (eventKind < 5)
             {
-                if(GameManager.Instance.isActive[rand] == false)
+                if(GameManager.Instance.isActive[eventKind] == false)
                 {
                     totalEventCount++;
-                    dest = eventPos[rand]; 
+                    dest = eventPos[eventKind];
                     isPathFinding = false;
                     PathFinding();
                     FinalNodeList.RemoveAt(0);
                     isMoving = true;
-                    GameManager.Instance.isActive[rand] = true;
-                    yield return new WaitForSeconds(1f);
+                    GameManager.Instance.isActive[eventKind] = true;
+                    state = 2;
+                    yield break;
                 }
             }
             else{
-                randomPosition();
+                state = 0;
             }
         }
         else{
-            randomPosition();
+            state = 0;
         }
         yield return null;
     }
