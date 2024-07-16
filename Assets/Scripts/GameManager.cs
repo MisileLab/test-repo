@@ -65,13 +65,31 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0)){
             PathFinding();
             FinalNodeList.RemoveAt(0);
             isMoving = true;
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+        if (!isMoving
+            && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.transform.position.x)
+            && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.transform.position.y)
+        ) {
+            System.Random rand = new System.Random();
+            dest.transform.position = new Vector3(
+                rand.Next(bottomLeft.x, topRight.x),
+                rand.Next(bottomLeft.y, topRight.y),
+                0
+            );
+            while (dest.gameObject.layer == LayerMask.NameToLayer("Wall") || dest.gameObject.layer == LayerMask.NameToLayer("object")) {
+                dest.transform.position = new Vector3(
+                    rand.Next(bottomLeft.x, topRight.x),
+                    rand.Next(bottomLeft.y, topRight.y),
+                    0
+                );
+            }
+        }
     }
 
     IEnumerator NpcMove(List<Node> optimizedPath)
@@ -99,13 +117,13 @@ public class GameManager : MonoBehaviour
             for (int j = 0; j < sizeY; j++)
             {
                 bool isWall = false;
-                foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(i + bottomLeft.x, j + bottomLeft.y), 0.4f))
+                foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(i + bottomLeft.x, j + bottomLeft.y), 0.4f)) {
                     if (col.gameObject.layer == LayerMask.NameToLayer("Wall")) isWall = true;
+                }
 
                 NodeArray[i, j] = new Node(isWall, i + bottomLeft.x, j + bottomLeft.y);
             }
         }
-
 
         // 시작과 끝 노드, 열린리스트와 닫힌리스트, 마지막리스트 초기화
         StartNode = NodeArray[startPos.x - bottomLeft.x, startPos.y - bottomLeft.y];
@@ -120,12 +138,12 @@ public class GameManager : MonoBehaviour
         {
             // 열린리스트 중 가장 F가 작고 F가 같다면 H가 작은 걸 현재노드로 하고 열린리스트에서 닫힌리스트로 옮기기
             CurNode = OpenList[0];
-            for (int i = 1; i < OpenList.Count; i++)
-                if (OpenList[i].F <= CurNode.F && OpenList[i].H < CurNode.H) CurNode = OpenList[i];
-
+            for (int i = 0; i < OpenList.Count; i++)
+                if (OpenList[i].F < CurNode.F || (OpenList[i].F == CurNode.F && OpenList[i].H < CurNode.H)) {
+                    CurNode = OpenList[i];
+                }
             OpenList.Remove(CurNode);
             ClosedList.Add(CurNode);
-
 
             // 마지막
             if (CurNode == TargetNode)
