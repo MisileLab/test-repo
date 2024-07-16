@@ -64,25 +64,27 @@ public class GameManager : MonoBehaviour
     }
 
     public void randomPosition() {
+        Debug.Log("hi");
         System.Random rand = new System.Random();
-        dest.transform.position = new Vector3(
-            rand.Next(bottomLeft.x, topRight.x),
-            rand.Next(bottomLeft.y, topRight.y),
-            0
-        );
-        targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+        while (true) {
+            dest.transform.position = new Vector3(
+                rand.Next(bottomLeft.x, topRight.x),
+                rand.Next(bottomLeft.y, topRight.y),
+                0
+            );
+            targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+            bool isWall = false;
+            foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(dest.transform.position.x, dest.transform.position.y), 0.4f)) {
+                if (col.gameObject.layer != 0) isWall = true;
+            }
+            if (!isWall) {
+                break;
+            }
+        }
     }
 
     private void Update()
     {
-        bool isWall = false;
-        foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(dest.transform.position.x + bottomLeft.x, dest.transform.position.y + bottomLeft.y), 0.4f)) {
-            if (col.gameObject.layer != 0) isWall = true;
-        }
-        if (isWall) {
-            randomPosition();
-            return;
-        }
         if (Input.GetMouseButtonDown(0)){
             PathFinding();
             FinalNodeList.RemoveAt(0);
