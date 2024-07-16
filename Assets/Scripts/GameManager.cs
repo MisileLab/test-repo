@@ -32,21 +32,17 @@ public class GameManager : MonoBehaviour
     public GameObject dest;
     //public vector3 dest;
 
-    public GameObject Npc;
+    public Npc npcnpc;
+
+    public int i=0;
 
     float delay;
-    private void Start()
-    {
-        Npc = this.gameObject;
-    }
 
     private void FixedUpdate()
     {
-        PathFinding();
-
         delay += Time.fixedDeltaTime;
 
-        if (delay > 0.2f) {
+        if (delay > 1f) {
             StartCoroutine(NpcMove(FinalNodeList));
             delay = 0;
         }
@@ -54,20 +50,25 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetMouseButtonDown(0)){
+            PathFinding();
+        }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
     }
 
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
-        int i = 0;
         Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
-        Npc.GetComponent<Npc>().MoveTo(destination,0.2f);
-        if (Npc.GetComponent<Npc>().moveState == 0)
+        npcnpc.MoveTo(destination,0.2f);
+        Debug.Log(npcnpc.moveState);
+        if (npcnpc.moveState == 0)
         {
+            Debug.Log(npcnpc.moveState);
             i++;
             if (optimizedPath[i] != null)
             {
+                i=0;
                 yield break;
             }
         }
