@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour {
     public Slider HPbar;
     public Text HPtext;
     public Text HPtext_back;
+    public Text kick_amount;
     float timer;
 
     void Update() {
@@ -22,5 +23,7 @@ public class UIManager : MonoBehaviour {
         HPbar.value = (float)GameManager.Instance.health / 100;
 
         HPtext_back.text = HPtext.text = (100 - GameManager.Instance.health).ToString() + "%";
+
+        kick_amount.text = "쫓겨난 사람: " + GameManager.Instance.kicked.ToString() + "/5";
     }
 }

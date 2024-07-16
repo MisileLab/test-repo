@@ -7,7 +7,8 @@ public class NpcGenerator : MonoBehaviour
     public static NpcGenerator Instance {get; private set;}
     public List<Npc> npcPrefabs = new();
     float time, delay;
-    public Vector2 spawnPos;
+    public Vector2 spawnFrom;
+    public Vector2 spawnTo;
     
     void Start()
     {
@@ -24,7 +25,8 @@ public class NpcGenerator : MonoBehaviour
                 if (time > delay) {
                     time = 0;
 
-                    SpawnNpc(npcPrefabs[Random.Range(0, npcPrefabs.Count - 1)], spawnPos);
+                    Npc npc = SpawnNpc(npcPrefabs[Random.Range(0, npcPrefabs.Count - 1)], spawnFrom);
+                    npc.GetComponent<Movement>().dest = spawnTo;
 
                     delay = Random.Range(0.5f + npcPrefabs.Count * 0.5f, 2.5f + npcPrefabs.Count * 0.5f);
                 }

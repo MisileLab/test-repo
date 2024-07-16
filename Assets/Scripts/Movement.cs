@@ -94,14 +94,20 @@ public class Movement : MonoBehaviour
         com = new Vector2(45,3);
         bed = new Vector2(57,-4);
         console = new Vector2(21,4);
+
+        Invoke("StartFinding", 0.5f);
+    }
+    void StartFinding() {
+        isPathFinding = false;
+        PathFinding();
+        FinalNodeList.RemoveAt(0);
+        isMoving = true;
     }
     private void Update()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y / 100);
         if (Input.GetMouseButtonDown(0)){
-            isPathFinding = false;
-            PathFinding();
-            FinalNodeList.RemoveAt(0);
-            isMoving = true;
+            StartFinding();
         }
         if (Input.GetMouseButtonDown(1)) {
             randomPosition();
