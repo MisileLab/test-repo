@@ -96,7 +96,12 @@ public class Npc : MonoBehaviour
         Vector3 mPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y));
 
         if (Vector3.Distance(new Vector3(mPos.x, mPos.y), new Vector3(transform.position.x, transform.position.y)) <= 2) {
-            render.material = outline;
+            if (GameManager.Instance.highlighting)
+                render.material = outline;
+            else
+                render.material = defMat;
+
+            
             if (Input.GetMouseButtonDown(0)) {
                 OnClick();
             }

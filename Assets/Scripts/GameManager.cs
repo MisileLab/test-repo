@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public string action = null;
     public GameObject highlight;
 
-    public bool isStarted, starting;
+    public bool isStarted, starting, highlighting;
     public List<Npc> npcs = new();
     public int kicked = 0;
     public int health;
@@ -54,7 +54,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (highlight.activeSelf) {
+        highlighting = highlight.activeSelf;
+
+        if (highlighting) {
             Time.timeScale = 0.3f;
         } else {
             Time.timeScale = 1;
