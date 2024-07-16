@@ -90,8 +90,18 @@ public class Movement : MonoBehaviour
             isMoving = true;
         }
     }
+    private void Start(){
+        Invoke("StartFinding", 0.5f);
+    }
+    void StartFinding() {
+        isPathFinding = false;
+        PathFinding();
+        FinalNodeList.RemoveAt(0);
+        isMoving = true;
+    }
     private void Update()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y / 100);
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
         if (!isMoving
