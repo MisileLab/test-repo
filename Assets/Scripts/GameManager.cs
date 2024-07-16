@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
     //public vector3 dest;
 
     public Npc npcnpc;
-    public bool isMoving=false;
+    public bool isMoving = false;
 
-    public int i=0;
+    public int i = 0;
 
     float delay;
 
@@ -43,32 +43,32 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isMoving){
+        if (isMoving) {
             delay += Time.fixedDeltaTime;
 
-        if (state == 0) {
-            if (delay > 0.4f) {
-                if (Random.Range(0, 100) <= 30) {
-                    state = 1;
+            if (state == 0) {
+                if (delay > 0.4f) {
+                    if (Random.Range(0, 100) <= 30) {
+                        state = 1;
+                    }
+
+                    StartCoroutine(NpcMove(FinalNodeList));
+                    delay = 0;
                 }
-            
-                StartCoroutine(NpcMove(FinalNodeList));
-                delay = 0;
+            } else if (state == 1) {
+                if (delay > 1f) {
+                    state = 0;
+                }
             }
-        } else if (state == 1) {
-            if (delay > 1f) {
-                state = 0;
-            }
-        }
         }
     }
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0)) {
             PathFinding();
             FinalNodeList.RemoveAt(0);
-            isMoving=true;
+            isMoving = true;
         }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
@@ -80,9 +80,9 @@ public class GameManager : MonoBehaviour
             isMoving = false;
             yield break; // 리스트의 들어있는 값 수보다 i가 높을 시 yield break
         }
-        Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
+        Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y, 0);
         Debug.Log(destination);
-        npcnpc.MoveTo(destination,0.2f);
+        npcnpc.MoveTo(destination, 0.2f);
         yield return new WaitForSeconds(0.2f);
         i++;
     }
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
                 NodeArray[i, j] = new Node(isWall, i + bottomLeft.x, j + bottomLeft.y);
             }
         }
-        
+
 
         // 시작과 끝 노드, 열린리스트와 닫힌리스트, 마지막리스트 초기화
         StartNode = NodeArray[startPos.x - bottomLeft.x, startPos.y - bottomLeft.y];
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
         ClosedList = new List<Node>();
         FinalNodeList = new List<Node>();
 
-        
+
         while (OpenList.Count > 0)
         {
             // 열린리스트 중 가장 F가 작고 F가 같다면 H가 작은 걸 현재노드로 하고 열린리스트에서 닫힌리스트로 옮기기
@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
             // 코너를 가로질러 가지 않을시, 이동 중에 수직수평 장애물이 있으면 안됨
             if (dontCrossCorner) if (NodeArray[CurNode.x - bottomLeft.x, checkY - bottomLeft.y].isWall || NodeArray[checkX - bottomLeft.x, CurNode.y - bottomLeft.y].isWall) return;
 
-            
+
             // 이웃노드에 넣고, 직선은 10, 대각선은 14비용
             Node NeighborNode = NodeArray[checkX - bottomLeft.x, checkY - bottomLeft.y];
             int MoveCost = CurNode.G + (CurNode.x - checkX == 0 || CurNode.y - checkY == 0 ? 10 : 14);
@@ -188,6 +188,8 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+
 
     void OnDrawGizmos()
     {
