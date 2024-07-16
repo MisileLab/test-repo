@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public bool isStarted, starting;
     public List<Npc> npcs = new();
     public int kicked = 0;
+    public int health;
     void Start()
     {
         Instance = this;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         starting = true;
 
         kicked = 0;
+        health = 5;
 
         for (int i = 0; i < 3; i++) {
             Debug.Log(3 - i);
@@ -89,7 +91,7 @@ public class GameManager : MonoBehaviour
 
     public void Kick() {
         if (kicked >= 5) return;
-        
+
         highlight.SetActive(true);
         action = "kick";
     }

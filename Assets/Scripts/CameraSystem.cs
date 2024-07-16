@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class CameraSystem : MonoBehaviour
 {
     Vector3 movePerSecond = new(40, 40, 0); // z 0 고정
     Vector3 pastMousePos;
@@ -20,7 +20,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Update() {
         var velocity = pastMousePos-Input.mousePosition;
         if (!isIgnoringMove) {
-            if (Input.GetMouseButton(0) && Input.mousePosition != pastMousePos) {
+            if (Input.GetMouseButton(1) && Input.mousePosition != pastMousePos) {
                 if (Input.mousePosition.x != pastMousePos.x) {
                     transform.Translate(movePerSecond.x * Time.deltaTime * velocity.x * camIntensity * (Camera.main.orthographicSize / 25), 0, 0);
                 }
