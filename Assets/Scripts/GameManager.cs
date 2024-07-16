@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     public Npc npcnpc;
     public bool isMoving = false;
+    public bool isPathFinding = false;
 
     public int i = 0;
 
@@ -81,11 +82,18 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+        if (isPathFinding) {
+            isPathFinding = false;
+            PathFinding();
+            FinalNodeList.RemoveAt(0);
+            isMoving = true;
+        }
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0)){
+            isPathFinding = false;
             PathFinding();
             FinalNodeList.RemoveAt(0);
             isMoving = true;
@@ -118,6 +126,8 @@ public class GameManager : MonoBehaviour
 
     public void PathFinding()
     {
+        isPathFinding = true;
+
         // NodeArray의 크기 정해주고, isWall, x, y 대입
         sizeX = topRight.x - bottomLeft.x + 1;
         sizeY = topRight.y - bottomLeft.y + 1;
@@ -145,7 +155,7 @@ public class GameManager : MonoBehaviour
         FinalNodeList = new List<Node>();
 
 
-        while (OpenList.Count > 0)
+        while (OpenList.Count > 0 && isPathFinding)
         {
             // 열린리스트 중 가장 F가 작고 F가 같다면 H가 작은 걸 현재노드로 하고 열린리스트에서 닫힌리스트로 옮기기
             CurNode = OpenList[0];
@@ -187,6 +197,7 @@ public class GameManager : MonoBehaviour
             OpenListAdd(CurNode.x, CurNode.y - 1);
             OpenListAdd(CurNode.x - 1, CurNode.y);
         }
+        i = 0;
     }
 
     void OpenListAdd(int checkX, int checkY)
