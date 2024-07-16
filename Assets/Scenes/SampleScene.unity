@@ -818,6 +818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   limitScale: 25
+  camIntensity: 0.045
   limitCameraPosPositive: {x: 85, y: 50}
   limitCameraPosNegative: {x: -15, y: -50}
 --- !u!1 &528271634

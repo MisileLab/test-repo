@@ -53,8 +53,8 @@ public class GameManager : MonoBehaviour
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
         int i = 0;
-        Vector3 destination = new Vector3(optimizedPath[i].x-this.transform.position.x, optimizedPath[i].y-this.transform.position.y,0);
-        Npc.GetComponent<Npc>().Move(destination);
+        Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
+        Npc.GetComponent<Npc>().MoveTo(destination,0.2f);
         if (Npc.GetComponent<Npc>().moveState == 0)
         {
             i++;

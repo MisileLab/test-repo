@@ -5,6 +5,7 @@ public class NewBehaviourScript : MonoBehaviour
     Vector3 movePerSecond = new(40, 40, 0); // z 0 고정
     Vector3 pastMousePos;
     public int limitScale = 25;
+    public float camIntensity = 0.045f;
     public Vector2 limitCameraPosPositive = new(1, 1);
     public Vector2 limitCameraPosNegative = new(-1, -1);
 
@@ -18,10 +19,10 @@ public class NewBehaviourScript : MonoBehaviour
         var velocity = pastMousePos-Input.mousePosition;
         if (Input.GetMouseButton(0) && Input.mousePosition != pastMousePos) {
             if (Input.mousePosition.x != pastMousePos.x) {
-                transform.Translate(movePerSecond.x * Time.deltaTime * velocity.x * 0.6F * (Camera.main.orthographicSize / 25), 0, 0);
+                transform.Translate(movePerSecond.x * Time.deltaTime * velocity.x * camIntensity * (Camera.main.orthographicSize / 25), 0, 0);
             }
             if (Input.mousePosition.y != pastMousePos.y) {
-                transform.Translate(0, movePerSecond.y * Time.deltaTime * velocity.y * 0.6F * (Camera.main.orthographicSize / 25), 0);
+                transform.Translate(0, movePerSecond.y * Time.deltaTime * velocity.y * camIntensity * (Camera.main.orthographicSize / 25), 0);
             }
         }
         pastMousePos = Input.mousePosition;
