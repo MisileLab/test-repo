@@ -6,6 +6,8 @@ public class UIManager : MonoBehaviour {
     public Text timerText_back;
     public Text npcCount;
     public Slider HPbar;
+    public Text HPtext;
+    public Text HPtext_back;
     float timer;
 
     void Update() {
@@ -18,5 +20,7 @@ public class UIManager : MonoBehaviour {
         npcCount.text = "활동중인 인원: " + GameManager.Instance.npcs.Count.ToString();
 
         HPbar.value = (float)GameManager.Instance.health / 100;
+
+        HPtext_back.text = HPtext.text = (100 - GameManager.Instance.health).ToString() + "%";
     }
 }
