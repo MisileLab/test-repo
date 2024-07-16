@@ -18,7 +18,7 @@ public class Node
 }
 
 
-public class GameManager : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     public Vector2Int bottomLeft, topRight, startPos, targetPos;
     public List<Node> FinalNodeList;
