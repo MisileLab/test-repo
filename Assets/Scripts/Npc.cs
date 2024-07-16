@@ -105,12 +105,8 @@ public class Npc : MonoBehaviour
         }
     }
 
-    public void OnSelect() {
-        Debug.Log("Select");
-    }
-
     public void OnClick() {
-        Debug.Log("click");
+        GameManager.Instance.OnSelect(this);
     }
 
     public void Move(Vector3 vel) {
