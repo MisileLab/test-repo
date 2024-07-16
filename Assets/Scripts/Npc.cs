@@ -25,7 +25,7 @@ public class Npc : MonoBehaviour
         if (moveState != 0) {
             moveTime += Time.deltaTime;
 
-            if (moveTime > 0.1f) {
+            if (moveTime > 0.2f) {
                 moveState = 0;
                 moveTime = 0;
             }
@@ -43,20 +43,22 @@ public class Npc : MonoBehaviour
     public void Move(Vector3 vel) {
         moveTime = 0;
 
-        if (vel.x > 0) {
-            moveState = 1;
-            render.flipX = false;
-        } else if (vel.x < 0) {
-            moveState = 1;
-            render.flipX = true;
-        }
-
-        if (vel.y >= 0) {
-            moveState = 2;
-            isFront = false;
+        if (Mathf.Abs(vel.x) > Mathf.Abs(vel.y)) {
+            if (vel.x > 0) {
+                moveState = 1;
+                render.flipX = false;
+            } else if (vel.x < 0) {
+                moveState = 1;
+                render.flipX = true;
+            }
         } else {
-            moveState = 3;
-            isFront = true;
+            if (vel.y >= 0.1) {
+                moveState = 2;
+                isFront = false;
+            } else {
+                moveState = 3;
+                isFront = true;
+            }
         }
 
         transform.Translate(vel);
@@ -73,10 +75,10 @@ public class Npc : MonoBehaviour
 
     IEnumerator moveTo(Vector3 pos, float sec) {
         Vector3 differ = pos - transform.position;
-        for (int i = 0; i <= 60; i++) {
-            Move(differ / 60);
+        for (int i = 0; i <= 20; i++) {
+            Move(differ / 20);
 
-            yield return new WaitForSeconds(sec / 60);
+            yield return new WaitForSeconds(sec / 20);
         }
 
         moveRoutine = null;

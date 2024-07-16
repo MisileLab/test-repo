@@ -32,46 +32,77 @@ public class GameManager : MonoBehaviour
     public GameObject dest;
     //public vector3 dest;
 
-    public GameObject Npc;
+    public Npc npcnpc;
+    public bool isMoving = false;
+
+    public int i = 0;
 
     float delay;
-    private void Start()
-    {
-        Npc = this.gameObject;
-    }
+
+    int state = 0;
 
     private void FixedUpdate()
     {
-        PathFinding();
+        if (isMoving) {
+            delay += Time.fixedDeltaTime;
 
-        delay += Time.fixedDeltaTime;
+            if (state == 0) {
+                if (delay > 0.4f) {
+                    if (Random.Range(0, 100) <= 30) {
+                        state = 1;
+                    }
 
-        if (delay > 0.2f) {
-            StartCoroutine(NpcMove(FinalNodeList));
-            delay = 0;
+                    StartCoroutine(NpcMove(FinalNodeList));
+                    delay = 0;
+                }
+            } else if (state == 1) {
+                if (delay > 1f) {
+                    state = 0;
+                }
+            }
         }
     }
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0)){
+            PathFinding();
+            FinalNodeList.RemoveAt(0);
+            isMoving = true;
+        }
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.transform.position.x), Mathf.RoundToInt(dest.transform.position.y));
+        if (!isMoving
+            && Mathf.Round(this.transform.position.x) == Mathf.RoundToInt(dest.transform.position.x)
+            && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.transform.position.y)
+        ) {
+            System.Random rand = new System.Random();
+            dest.transform.position = new Vector3(
+                rand.Next(bottomLeft.x, topRight.x),
+                rand.Next(bottomLeft.y, topRight.y),
+                0
+            );
+            while (dest.gameObject.layer == LayerMask.NameToLayer("Wall") || dest.gameObject.layer == LayerMask.NameToLayer("object")) {
+                dest.transform.position = new Vector3(
+                    rand.Next(bottomLeft.x, topRight.x),
+                    rand.Next(bottomLeft.y, topRight.y),
+                    0
+                );
+            }
+        }
     }
 
     IEnumerator NpcMove(List<Node> optimizedPath)
     {
-        int i = 0;
-        Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y,0);
-        Npc.GetComponent<Npc>().MoveTo(destination,0.2f);
-        if (Npc.GetComponent<Npc>().moveState == 0)
-        {
-            i++;
-            if (optimizedPath[i] != null)
-            {
-                yield break;
-            }
+        if (i >= optimizedPath.Count) {
+            isMoving = false;
+            yield break; // 리스트의 들어있는 값 수보다 i가 높을 시 yield break
         }
-        yield return null;
+        Vector3 destination = new Vector3(optimizedPath[i].x, optimizedPath[i].y, 0);
+        Debug.Log(destination);
+        npcnpc.MoveTo(destination, 0.2f);
+        yield return new WaitForSeconds(0.2f);
+        i++;
     }
 
     public void PathFinding()
@@ -86,13 +117,13 @@ public class GameManager : MonoBehaviour
             for (int j = 0; j < sizeY; j++)
             {
                 bool isWall = false;
-                foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(i + bottomLeft.x, j + bottomLeft.y), 0.4f))
+                foreach (Collider2D col in Physics2D.OverlapCircleAll(new Vector2(i + bottomLeft.x, j + bottomLeft.y), 0.4f)) {
                     if (col.gameObject.layer == LayerMask.NameToLayer("Wall")) isWall = true;
+                }
 
                 NodeArray[i, j] = new Node(isWall, i + bottomLeft.x, j + bottomLeft.y);
             }
         }
-        
 
         // 시작과 끝 노드, 열린리스트와 닫힌리스트, 마지막리스트 초기화
         StartNode = NodeArray[startPos.x - bottomLeft.x, startPos.y - bottomLeft.y];
@@ -102,17 +133,17 @@ public class GameManager : MonoBehaviour
         ClosedList = new List<Node>();
         FinalNodeList = new List<Node>();
 
-        
+
         while (OpenList.Count > 0)
         {
             // 열린리스트 중 가장 F가 작고 F가 같다면 H가 작은 걸 현재노드로 하고 열린리스트에서 닫힌리스트로 옮기기
             CurNode = OpenList[0];
-            for (int i = 1; i < OpenList.Count; i++)
-                if (OpenList[i].F <= CurNode.F && OpenList[i].H < CurNode.H) CurNode = OpenList[i];
-
+            for (int i = 0; i < OpenList.Count; i++)
+                if (OpenList[i].F < CurNode.F || (OpenList[i].F == CurNode.F && OpenList[i].H < CurNode.H)) {
+                    CurNode = OpenList[i];
+                }
             OpenList.Remove(CurNode);
             ClosedList.Add(CurNode);
-
 
             // 마지막
             if (CurNode == TargetNode)
@@ -158,7 +189,7 @@ public class GameManager : MonoBehaviour
             // 코너를 가로질러 가지 않을시, 이동 중에 수직수평 장애물이 있으면 안됨
             if (dontCrossCorner) if (NodeArray[CurNode.x - bottomLeft.x, checkY - bottomLeft.y].isWall || NodeArray[checkX - bottomLeft.x, CurNode.y - bottomLeft.y].isWall) return;
 
-            
+
             // 이웃노드에 넣고, 직선은 10, 대각선은 14비용
             Node NeighborNode = NodeArray[checkX - bottomLeft.x, checkY - bottomLeft.y];
             int MoveCost = CurNode.G + (CurNode.x - checkX == 0 || CurNode.y - checkY == 0 ? 10 : 14);
@@ -175,6 +206,8 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+
 
     void OnDrawGizmos()
     {
