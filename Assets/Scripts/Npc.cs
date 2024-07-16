@@ -15,13 +15,12 @@ public class Npc : MonoBehaviour
         animator = GetComponent<Animator>();
         render = GetComponent<SpriteRenderer>();
 
-        //MoveTo(transform.position + new Vector3(0, 3, 0), 1); test
+        //MoveTo(transform.position + new Vector3(0, 3, 0), 1); //test
     }
 
     void Update()
     {
         animator.SetInteger("moveState", moveState);
-        animator.SetBool("isFront", isFront);
 
         if (moveState != 0) {
             moveTime += Time.deltaTime;
