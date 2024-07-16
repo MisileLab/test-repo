@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-
 
 [System.Serializable]
 public class Node
@@ -40,7 +38,7 @@ public class Movement : MonoBehaviour
 
     float delay;
 
-    public int state = 0;
+    int state = 0;
 
     private void FixedUpdate()
     {
