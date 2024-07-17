@@ -42,6 +42,8 @@ public class MaximItem : ItemAction
         actionEnd = true;
 
         GameManager.Instance.health -= 6;
+        @book.canClean = false;
+        @book.Activated = false;
     }
 
     public override void OnUse(ref bool cancel)

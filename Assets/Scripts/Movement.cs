@@ -57,14 +57,21 @@ public class Movement : MonoBehaviour
                     delay = 0;
                 }
             } else if (state == 1) {
+                npcnpc.info.text = "<color=\"grey\">?</color>";
                 if (delay > 1f) {
+                    npcnpc.info.text = "";
+
                     StartCoroutine(Event());
-                    delay=0f;
                 }
             }
 
         if (state == 2)
         {
+            if (delay < 0) {
+                npcnpc.info.text = "<color=\"red\">!</color>";
+            } else {
+                npcnpc.info.text = "";
+            }
             if (delay > 0.4f) {
                 StartCoroutine(NpcMove(FinalNodeList));
                 delay = 0;
@@ -241,6 +248,7 @@ public class Movement : MonoBehaviour
                 isMoving = true;
 
                 state = 2;
+                delay = -1;
 
                 yield break;
             }
