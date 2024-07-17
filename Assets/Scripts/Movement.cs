@@ -46,8 +46,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isMoving) {
-            delay += Time.fixedDeltaTime;
+        delay += Time.fixedDeltaTime;
             if (state == 0) {
                 if (delay > 0.4f) {
                     if (Random.Range(0, 100) <= 10) {
@@ -62,7 +61,6 @@ public class Movement : MonoBehaviour
                     delay=0f;
                 }
             }
-        }
 
         if (state == 2)
             {
@@ -107,6 +105,7 @@ public class Movement : MonoBehaviour
     }
 
     public void randomPosition() {
+        isMoving = true;
         System.Random rand = new System.Random();
         while (true) {
             dest = new Vector3(
