@@ -6,9 +6,9 @@ public class ConsoleEvent : EventAction
     [SerializeField] GameObject blackPanel;
     public override string Id => "console";
     public bool actionEnd = false, canClean;
-    public override bool StayActive => true;
+    public override bool StayActive => false;
 
-    public override Vector2 Pos => new(21, 4);
+    public override Vector2 Pos => new(22, -5);
 
     public override bool EndAction()
     {

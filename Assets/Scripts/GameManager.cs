@@ -54,7 +54,8 @@ public class GameManager : MonoBehaviour
             cost += Time.deltaTime * 0.5f;
 
             kickMax = 5 + (int)(gameTime / 60);
-            maxNpc = 6 + (int)(gameTime / 60);
+            //maxNpc = 6 + (int)(gameTime / 60);
+            maxNpc = 1;
         }
 
         if (health < 5) health = 5;

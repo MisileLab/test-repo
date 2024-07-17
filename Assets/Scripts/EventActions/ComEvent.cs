@@ -7,9 +7,9 @@ public class ComEvent : EventAction
     public override string Id => "com";
     
     public bool actionEnd = false, canClean;
-    public override bool StayActive => true;
+    public override bool StayActive => false;
 
-    public override Vector2 Pos => new(45, 3);
+    public override Vector2 Pos => new(47, 1);
 
     public override bool EndAction()
     {

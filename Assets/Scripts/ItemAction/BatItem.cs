@@ -29,6 +29,8 @@ public class BatItem : ItemAction
     {
         cancel = true;
 
+        GameManager.Instance.cost -= 5;
+
         ActNpc.Comment("으악..!");
         var movement = ActNpc.GetComponent<Movement>();
 
