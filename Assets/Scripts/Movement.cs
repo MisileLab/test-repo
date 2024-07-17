@@ -47,8 +47,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isMoving) {
-            delay += Time.fixedDeltaTime;
+        delay += Time.fixedDeltaTime;
             if (state == 0) {
                 if (delay > 0.4f) {
                     if (Random.Range(0, 100) <= 10) {
@@ -60,9 +59,9 @@ public class Movement : MonoBehaviour
             } else if (state == 1) {
                 if (delay > 1f) {
                     StartCoroutine(Event());
+                    delay=0f;
                 }
             }
-        }
 
         if (state == 2)
         {
@@ -165,6 +164,7 @@ public class Movement : MonoBehaviour
     }
 
     public void randomPosition() {
+        isMoving = true;
         System.Random rand = new System.Random();
         while (true) {
             dest = new Vector3(
@@ -199,9 +199,6 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            PathFinding();
-        }
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y / 100);
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
@@ -210,7 +207,6 @@ public class Movement : MonoBehaviour
             && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.y)
         ) {
             if (state == 0) randomPosition();
-        } else {
         }
     }
 
