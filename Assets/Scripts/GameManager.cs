@@ -14,8 +14,11 @@ public class GameManager : MonoBehaviour
     public List<Npc> npcs = new();
     public int kicked = 0;
     public int health;
+    public float cost;
 
     public List<EventAction> events;
+    public List<ItemAction> items;
+    public ItemAction item = null;
 
     public List<bool> isActive;//0-cloth,1-book,2-com,3-bed,4-console
     void Awake()
@@ -48,9 +51,11 @@ public class GameManager : MonoBehaviour
     void Update() {
         if (isStarted) {
             gameTime += Time.deltaTime;
+            cost += Time.deltaTime * 0.5f;
         }
 
         if (health < 5) health = 5;
+        if (cost > 10) cost = 10;
 
         if (action != null) {
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -88,6 +93,24 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             DestroyNpc(npc);
+        } if (action == "using") {
+            if (item != null && cost >= item.Cost) {
+                bool cancel = false;
+
+                item.ActNpc = npc;
+                item.OnUse(ref cancel);
+
+                if (cancel) {
+                    item.ActNpc = null;
+                } else {
+                    cost -= item.Cost;
+                    npc.GetComponent<Movement>().StartItem(item);
+                }
+
+                item = null;
+            }
+
+            action = null;
         } else {
             action = null;
         }

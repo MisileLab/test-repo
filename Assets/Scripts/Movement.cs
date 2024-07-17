@@ -43,6 +43,7 @@ public class Movement : MonoBehaviour
     public int eventKind;
     public bool arrived;
     EventAction @event = null;
+    ItemAction @item = null;
 
     private void FixedUpdate()
     {
@@ -56,40 +57,94 @@ public class Movement : MonoBehaviour
                     delay = 0;
                 }
             } else if (state == 1) {
+                npcnpc.info.text = "<color=\"grey\">?</color>";
                 if (delay > 1f) {
+                    npcnpc.info.text = "";
+
                     StartCoroutine(Event());
-                    delay=0f;
                 }
             }
 
         if (state == 2)
-            {
-                if (delay > 0.4f) {
-                    StartCoroutine(NpcMove(FinalNodeList));
-                    delay = 0;
-                }
+        {
+            if (delay < 0) {
+                npcnpc.info.text = "<color=\"red\">!</color>";
+            } else {
+                npcnpc.info.text = "";
+            }
+            if (delay > 0.4f) {
+                StartCoroutine(NpcMove(FinalNodeList));
+                delay = 0;
+            }
 
-                if (!isMoving) {
-                    @event.ActNpc = npcnpc;
-                    @event.StartAction();
+            if (!isMoving) {
+                @event.ActNpc = npcnpc;
+                @event.StartAction();
 
-                    state = 3;
+                state = 3;
+            }
+        }
+        else if(state == 3)
+        {
+            if (@event == null) {
+                state = 0;
+            } else {
+                @event.InAction();
+            
+                if (@event.EndAction()) {
+                    EventEnd();
                 }
             }
-            else if(state == 3)
-            {
-                if (@event == null) {
-                    state = 0;
-                } else {
-                    @event.InAction();
+        }
 
-                    Debug.Log(@event.EndAction());
-                
-                    if (@event.EndAction()) {
-                        EventEnd();
-                    }
+        if (state == 4) {
+            if (delay > 0.4f) {
+                StartCoroutine(NpcMove(FinalNodeList));
+                delay = 0;
+            }
+
+            if (!isMoving) {
+                @item.StartAction();
+
+                state = 5;
+            }
+        } else if (state == 5) {
+            if (@item == null) {
+                state = 0;
+            } else {
+                @item.InAction();
+
+                if (@item.EndAction()) {
+                    ItemEnd();
                 }
             }
+        }
+    }
+
+    public void StartItem(ItemAction it) {
+        @item = it;
+
+        StartCoroutine(startItem());
+    }
+
+    IEnumerator startItem() {
+        if(@item.Activated == false)
+        {
+            state = 4;
+
+            dest = @item.Pos;
+            isPathFinding = false;
+
+            @item.Activated = true;
+
+            yield return new WaitForSeconds(0.2f);
+            PathFinding();
+            if (FinalNodeList.Count > 0) FinalNodeList.RemoveAt(0);
+
+            isMoving = true;
+
+            yield break;
+        }
     }
 
     public void EventEnd() {
@@ -97,10 +152,21 @@ public class Movement : MonoBehaviour
         state = 0;
 
         if (@event != null) {
-            @event.Activated = false;
+            if (!@event.StayActive) @event.Activated = false;
             @event.ActNpc = null;
 
             @event = null;
+        }
+    }
+    public void ItemEnd() {
+        delay = 0;
+        state = 0;
+
+        if (@item != null) {
+            @item.Activated = false;
+            @item.ActNpc = null;
+
+            @item = null;
         }
     }
 
@@ -178,10 +244,11 @@ public class Movement : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
                 PathFinding();
                 if (FinalNodeList.Count > 0) FinalNodeList.RemoveAt(0);
-                
+
                 isMoving = true;
 
                 state = 2;
+                delay = -1;
 
                 yield break;
             }

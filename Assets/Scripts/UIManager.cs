@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour {
     public Text HPtext;
     public Text HPtext_back;
     public Text kick_amount;
+    public Text Cost;
     float timer;
 
     void Update() {
@@ -25,5 +26,7 @@ public class UIManager : MonoBehaviour {
         HPtext_back.text = HPtext.text = (100 - GameManager.Instance.health).ToString() + "%";
 
         kick_amount.text = "쫓겨난 사람: " + GameManager.Instance.kicked.ToString() + "/5";
+
+        Cost.text = "아이템 - " + ((int)GameManager.Instance.cost).ToString();
     }
 }

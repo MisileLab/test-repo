@@ -5,9 +5,10 @@ using UnityEngine;
 public class BookEvent : EventAction
 {
     [SerializeField] GameObject book_Set;
-    [SerializeField] List<Transform> books = new List<Transform>();
-    public bool actionEnd = false;
+    public List<Transform> books = new List<Transform>();
+    public bool actionEnd = false, canClean;
     public override string Id => "book";
+    public override bool StayActive => true;
 
     Vector2 center = new(0.882f, -0.065f);
 
@@ -38,6 +39,8 @@ public class BookEvent : EventAction
     }
 
     IEnumerator act() {
+        canClean = false;
+
         ActNpc.Comment("아이코 실수 ~");
         foreach (Transform book in books) {
             book.gameObject.SetActive(false);
@@ -61,6 +64,7 @@ public class BookEvent : EventAction
         yield return new WaitForSeconds(1f);
 
         actionEnd = true;
+        canClean = true;
 
         GameManager.Instance.health += 10;
     }

@@ -13,6 +13,7 @@ public class Npc : MonoBehaviour
     IEnumerator moveRoutine;
     [SerializeField] Image balloon;
     [SerializeField] Text comment;
+    public Text info;
     float balTime = 0;
 
     [SerializeField] Material outline;
