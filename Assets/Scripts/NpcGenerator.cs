@@ -19,7 +19,7 @@ public class NpcGenerator : MonoBehaviour
     void Update()
     {
         if (GameManager.Instance.isStarted) {
-            if (GameManager.Instance.npcs.Count < 6) {
+            if (GameManager.Instance.npcs.Count < GameManager.Instance.maxNpc) {
                 time += Time.deltaTime;
 
                 if (time > delay) {

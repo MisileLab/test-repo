@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     public bool isStarted, starting, highlighting;
     public List<Npc> npcs = new();
-    public int kicked = 0;
+    public int kicked = 0, kickMax, maxNpc;
     public int health;
     public float cost;
 
@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour
         if (isStarted) {
             gameTime += Time.deltaTime;
             cost += Time.deltaTime * 0.5f;
+
+            kickMax = 5 + (int)(gameTime / 60);
+            maxNpc = 6 + (int)(gameTime / 60);
         }
 
         if (health < 5) health = 5;
@@ -124,7 +127,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void Kick() {
-        if (kicked >= 5) return;
+        if (kicked >= kickMax) return;
 
         highlight.SetActive(true);
         action = "kick";
