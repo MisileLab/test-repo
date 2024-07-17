@@ -59,6 +59,7 @@ public class Movement : MonoBehaviour
             } else if (state == 1) {
                 if (delay > 1f) {
                     StartCoroutine(Event());
+                    delay=0f;
                 }
             }
         }
@@ -140,9 +141,6 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            PathFinding();
-        }
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y / 100);
         startPos = new Vector2Int(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y));
         targetPos = new Vector2Int(Mathf.RoundToInt(dest.x), Mathf.RoundToInt(dest.y));
@@ -151,7 +149,6 @@ public class Movement : MonoBehaviour
             && Mathf.Round(this.transform.position.y) == Mathf.RoundToInt(dest.y)
         ) {
             if (state == 0) randomPosition();
-        } else {
         }
     }
 
