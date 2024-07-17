@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour {
 
         HPtext_back.text = HPtext.text = (100 - GameManager.Instance.health).ToString() + "%";
 
-        kick_amount.text = "쫓겨난 사람: " + GameManager.Instance.kicked.ToString() + "/5";
+        kick_amount.text = "쫓겨난 사람: " + GameManager.Instance.kicked.ToString() + "/" + GameManager.Instance.kickMax.ToString();
 
         Cost.text = "아이템 - " + ((int)GameManager.Instance.cost).ToString();
     }

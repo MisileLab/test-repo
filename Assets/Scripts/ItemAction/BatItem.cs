@@ -37,5 +37,6 @@ public class BatItem : ItemAction
         movement.EventEnd();
         movement.ItemEnd();
         movement.state = 1;
+        movement.delay = -1;
     }
 }

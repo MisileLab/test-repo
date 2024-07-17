@@ -27,7 +27,7 @@ public class ConsoleEvent : EventAction
     IEnumerator act() {
         canClean = false;
 
-        ActNpc.Comment("아이코 실수 ~");
+        ActNpc.Comment("오늘 켠왕 ㄱㄱ");
         blackPanel.SetActive(false);
         yield return new WaitForSeconds(1f);
         canClean = true;

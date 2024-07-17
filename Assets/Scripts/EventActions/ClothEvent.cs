@@ -38,7 +38,7 @@ public class ClothEvent : EventAction
     }
 
     IEnumerator act() {
-        ActNpc.Comment("아이코 실수 ~");
+        ActNpc.Comment("입을 옷이 없잖아ㅏ!");
         foreach (Transform clothe in clothes) {
             clothe.gameObject.SetActive(false);
         }
