@@ -5,6 +5,7 @@ using UnityEngine;
 public class BookEvent : EventAction
 {
     [SerializeField] GameObject book_Set;
+    [SerializeField] List<string> comments = new();
     public List<Transform> books = new List<Transform>();
     public bool actionEnd = false, canClean;
     public override string Id => "book";
@@ -41,7 +42,7 @@ public class BookEvent : EventAction
     IEnumerator act() {
         canClean = false;
 
-        ActNpc.Comment("아이코 실수 ~");
+        ActNpc.Comment(comments[Random.Range(0, comments.Count - 1)]);
         foreach (Transform book in books) {
             book.gameObject.SetActive(false);
         }
