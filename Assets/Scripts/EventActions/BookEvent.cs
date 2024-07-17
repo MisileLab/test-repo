@@ -19,7 +19,7 @@ public class BookEvent : EventAction
         }
     }
 
-    public override Vector2 Pos => new(40, 5);
+    public override Vector2 Pos => new(39, 4);
 
     public override bool EndAction()
     {
@@ -61,5 +61,7 @@ public class BookEvent : EventAction
         yield return new WaitForSeconds(1f);
 
         actionEnd = true;
+
+        GameManager.Instance.health += 10;
     }
 }

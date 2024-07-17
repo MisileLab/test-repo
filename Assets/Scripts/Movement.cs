@@ -97,10 +97,12 @@ public class Movement : MonoBehaviour
         delay = 0;
         state = 0;
 
-        @event.Activated = false;
-        @event.ActNpc = null;
+        if (@event != null) {
+            @event.Activated = false;
+            @event.ActNpc = null;
 
-        @event = null;
+            @event = null;
+        }
     }
 
     public void randomPosition() {
@@ -167,30 +169,25 @@ public class Movement : MonoBehaviour
     }
     IEnumerator Event(){
         eventKind = Random.Range(0,10 + GameManager.Instance.events.Count);
-        if(totalEventCount<=2){
-            if (eventKind < GameManager.Instance.events.Count)
+        if (eventKind < GameManager.Instance.events.Count)
+        {
+            @event = GameManager.Instance.events[eventKind];
+            if(@event.Activated == false)
             {
-                @event = GameManager.Instance.events[eventKind];
-                if(@event.Activated == false)
-                {
-                    totalEventCount++;
-                    dest = @event.Pos;
-                    isPathFinding = false;
+                dest = @event.Pos;
+                isPathFinding = false;
 
-                    @event.Activated = true;
+                @event.Activated = true;
 
-                    yield return new WaitForSeconds(0.1f);
-                    PathFinding();
-                    if (FinalNodeList.Count > 0) FinalNodeList.RemoveAt(0);
-                    isMoving = true;
+                yield return new WaitForSeconds(0.2f);
+                PathFinding();
+                if (FinalNodeList.Count > 0) FinalNodeList.RemoveAt(0);
+                
+                isMoving = true;
 
-                    state = 2;
+                state = 2;
 
-                    yield break;
-                }
-            }
-            else{
-                state = 0;
+                yield break;
             }
         }
         else{
