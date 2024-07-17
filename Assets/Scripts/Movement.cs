@@ -239,6 +239,8 @@ public class Movement : MonoBehaviour
                 dest = @event.Pos;
                 isPathFinding = false;
 
+                state = 2;
+
                 @event.Activated = true;
 
                 yield return new WaitForSeconds(0.2f);
@@ -247,7 +249,6 @@ public class Movement : MonoBehaviour
 
                 isMoving = true;
 
-                state = 2;
                 delay = -1;
 
                 yield break;
