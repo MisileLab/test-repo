@@ -27,7 +27,7 @@ public class MaximItem : ItemAction
     }
 
     IEnumerator act() {
-        ActNpc.Comment("헉헉헉헉");
+        ActNpc.Comment("크흐흐흣흐");
 
         BookEvent @book = EventAction.Instance["book"] as BookEvent;
 
