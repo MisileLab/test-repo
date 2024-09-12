@@ -728,6 +728,7 @@ GameObject:
   - component: {fileID: 3810052888717945233}
   - component: {fileID: 4868311398503202747}
   - component: {fileID: 6856505582269001323}
+  - component: {fileID: 6387296720162637315}
   m_Layer: 5
   m_Name: ingame
   m_TagString: Untagged
@@ -747,12 +748,12 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 60008635300776362}
   - {fileID: 8757162075349342959}
   - {fileID: 948891237559051406}
   - {fileID: 146029161173212728}
   - {fileID: 4958514341572078040}
   - {fileID: 3714919753458067601}
-  - {fileID: 60008635300776362}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -823,6 +824,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6387296720162637315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449657095001102798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb98d324fce5c24eb81c8e10cbeb89c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2477116121698444222
 GameObject:
   m_ObjectHideFlags: 0
@@ -2347,7 +2360,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1420070032798487470}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6387296720162637315}
+        m_TargetAssemblyTypeName: restart, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &4242498102697998746
 MonoBehaviour:
   m_ObjectHideFlags: 0
